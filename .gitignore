@@ -20,3 +20,10 @@ ui-debug.log
 generated/jsonschema/*
 generated/config/config.json
 .nyc_output/
+build.log
+*.log
+etc/keys.json
+etc/service-account-key.json
+etc/config.json
+
+
