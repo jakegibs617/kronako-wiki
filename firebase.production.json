@@ -7,7 +7,7 @@
   },
   "hosting": [
     {
-      "site": "pn-wiki",
+      "site": "kronako-wiki",
       "public": "public",
       "redirects": [{
           "source": "/static/:file*",

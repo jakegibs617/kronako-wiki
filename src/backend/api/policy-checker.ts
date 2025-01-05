@@ -105,7 +105,7 @@ export class PolicyChecker {
         return {
             ...bagPermission,
             allowed,
-            reason: allowed ? undefined : PolicyRejectReason.CONTRAINTS,
+            reason: allowed ? undefined : PolicyRejectReason.CONSTRAINTS,
         };
     }
 

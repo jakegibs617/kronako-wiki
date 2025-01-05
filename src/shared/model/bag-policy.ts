@@ -8,7 +8,7 @@ export type BagPolicy = { [key in AccessType]: Grantee[] } & { constraints?: str
 
 export enum PolicyRejectReason {
     INSUFFICIENT_PERMISSION = 'insufficient_permissions',
-    CONTRAINTS = 'constraints',
+    CONSTRAINTS = 'constraints',
 }
 
 export const standardPolicies: { [bag: string]: BagPolicy } = {
