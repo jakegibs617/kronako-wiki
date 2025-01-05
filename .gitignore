@@ -25,5 +25,10 @@ build.log
 etc/keys.json
 etc/service-account-key.json
 etc/config.json
+.vscode*
+.vscode/settings.json
+.vscode/*
+
+
 
 
