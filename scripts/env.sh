@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ENV="${ENV:-staging}"
+# ENV="${ENV:-staging}"
+ENV="production"
 
 FIREBASECONFIGPATH="$DIR/../firebase.$ENV.json"
 if [ ! -f "$FIREBASECONFIGPATH" ]; then
@@ -30,6 +31,20 @@ TIDDLYWIKICLI="$DIR/../node_modules/.bin/tiddlywiki"
 [[ ${DEBUG} ]] && NODE_FLAGS="--inspect-brk" || NODE_FLAGS=""
 
 function firebase_cli() {
+    echo "DIR: $DIR"
+    echo "ENV: $ENV"
+    echo "KEYSPATH: $KEYSPATH"
+    echo "APIKEY: $APIKEY"
+    echo "REFERRER: $REFERRER"
+    echo "REFRESH_TOKEN: $REFRESH_TOKEN"
+    echo "CONFIGPATH: $CONFIGPATH"
+    echo "SERVICE_ACCOUNT_KEY: $SERVICE_ACCOUNT_KEY"
+    echo "NODE_FLAGS: $NODE_FLAGS"
+    echo "FIREBASECLI: $FIREBASECLI"
+    echo "FIREBASECONFIGPATH: $FIREBASECONFIGPATH"
+    echo "PROJECT: $PROJECT"
+    echo "TOKEN: $TOKEN"
+
     pushd "$DIR/../"
     GOOGLE_APPLICATION_CREDENTIALS="$SERVICE_ACCOUNT_KEY" node $NODE_FLAGS "$FIREBASECLI" --config "$FIREBASECONFIGPATH" --project "$PROJECT" --token "$TOKEN" $@
     popd
