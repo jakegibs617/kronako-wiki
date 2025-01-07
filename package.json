@@ -58,6 +58,7 @@
     "yargs": "^16.2.0"
   },
   "dependencies": {
+    "@js-sdsl/ordered-map": "^4.4.2",
     "ajv": "^7.2.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
