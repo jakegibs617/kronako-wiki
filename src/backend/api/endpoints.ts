@@ -20,7 +20,7 @@
  */
 
 import cors from 'cors';
-import * as express from 'express';
+import express from 'express';
 import { inject, injectable } from 'inversify';
 import { TW5FirebaseError, TW5FirebaseErrorCode } from '../../shared/model/errors';
 import { SingleWikiNamespacedTiddler } from '../../shared/model/store';
@@ -160,18 +160,61 @@ export class APIEndpointFactory {
     }
 
     createAPI() {
-        const api = express.default();
-        api.use(cors({ origin: true }));
+        const api = express();
+        
+        // CORS middleware
+        api.use(cors({ 
+            origin: 'https://kronako-wiki.web.app', 
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+            allowedHeaders: 'Authorization, Content-Type, Accept',
+            optionsSuccessStatus: 204 
+        }));
+        
+        // Preflight request handling
+        api.options('*', (req, res) => {
+            res.set({
+                'Access-Control-Allow-Origin': 'https://kronako-wiki.web.app',
+                'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+                'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept',
+            });
+            res.status(204).send(); // Respond with no content
+        });
+    
+        // Add CORS headers to all responses
+        api.use((req, res, next) => {
+            res.set('Access-Control-Allow-Origin', 'https://kronako-wiki.web.app');
+            next();
+        });
+    
+        // Authorization header validation
+        api.use((req, res, next) => {
+            if (req.headers.authorization) {
+                next(); // Authorization logic passes
+            } else {
+                res.status(401).send("Authorization header is required");
+            }
+        });
+    
+        // Attach middleware
         api.use(this.authenticatorMiddleware.authenticate.bind(this.authenticatorMiddleware));
+    
+        // Bind endpoints
         const read = this.bindAndSerialize(this.read);
         const write = this.bindAndSerialize(this.write);
         api.get('/:wiki/recipes/:recipe/tiddlers/:title?', read);
         api.get('/:wiki/bags/:bag/tiddlers/:title?', read);
-        api.put('/:wiki/recipes/:recipe/tiddlers/:title', write); // create
-        api.put('/:wiki/recipes/:recipe/tiddlers/:title/revisions/:revision', write); // update
-        api.put('/:wiki/bags/:bag/tiddlers/:title', write); // create
-        api.put('/:wiki/bags/:bag/tiddlers/:title/revisions/:revision', write); // update
+        api.put('/:wiki/recipes/:recipe/tiddlers/:title', write);
+        api.put('/:wiki/recipes/:recipe/tiddlers/:title/revisions/:revision', write);
+        api.put('/:wiki/bags/:bag/tiddlers/:title', write);
+        api.put('/:wiki/bags/:bag/tiddlers/:title/revisions/:revision', write);
         api.delete('/:wiki/bags/:bag/tiddlers/:title/revisions/:revision', this.bindAndSerialize(this.remove));
+    
+        // Error handling middleware
+        api.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+            console.error(err.stack);
+            res.status(err.status || 500).send(err.message || 'Internal Server Error');
+        });
+    
         return api;
     }
 }

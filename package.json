@@ -59,11 +59,14 @@
   },
   "dependencies": {
     "@js-sdsl/ordered-map": "^4.4.2",
+    "@types/helmet": "^0.0.48",
     "ajv": "^7.2.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-rate-limit": "^7.5.0",
     "firebase-admin": "^9.5.0",
     "firebase-functions": "^3.13.2",
+    "helmet": "^8.0.0",
     "inversify": "^5.0.5",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.19"

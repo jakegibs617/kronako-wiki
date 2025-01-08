@@ -13,10 +13,12 @@ service cloud.firestore {
         function hasAccessByRole() {
           // don't allow access to personal bags in this match clause
           let isPersonalBag = bagName.matches('^user%3A.*');
-          // anybody with at least reader can read non-personal bags
-          let allowedByRole = get(/databases/$(database)/documents/wikis/$(wikiName)/users/$(request.auth.uid)).data.role >= 2;
+          // Verify role exists and is valid
+          let allowedByRole = exists(/databases/$(database)/documents/wikis/$(wikiName)/users/$(request.auth.uid)) && 
+                              get(/databases/$(database)/documents/wikis/$(wikiName)/users/$(request.auth.uid)).data.role >= 2;
           return !isPersonalBag && allowedByRole;
         }
+
         allow get, list: if request.auth != null && hasAccessByRole();
     }
   }
