@@ -28,7 +28,7 @@ etc/config.json
 .vscode*
 .vscode/settings.json
 .vscode/*
-
+allowed-ips.json
 
 
 
